@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v4
+
+    - name: Set up NDK
+      uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r26b
+      
+    - name: Build
+      run: |
+        ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./jni/Android.mk NDK_APPLICATION_MK=./jni/Application.mk
+      
+    - name: Upload Android Ptrace Injector
+      uses: actions/upload-artifact@v4
+      with:
+        name: Android-Ptrace-Injector
+        path: libs/*
